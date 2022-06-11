@@ -38,6 +38,7 @@ public class Home extends javax.swing.JFrame implements Screen{
     }
     @Override
     public void Render() {
+        setLocationRelativeTo(null);
         getInstance().setVisible(true);
     }
 
@@ -97,6 +98,11 @@ public class Home extends javax.swing.JFrame implements Screen{
         jScrollPane1.setViewportView(tblNguoi);
 
         btn_add.setText("Thêm");
+        btn_add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_addActionPerformed(evt);
+            }
+        });
 
         btn_edit.setText("Sửa");
 
@@ -138,7 +144,7 @@ public class Home extends javax.swing.JFrame implements Screen{
                 .addContainerGap())
         );
 
-        tabQLDC.addTab("Quản lý thông tin cá nhân", tabNguoi);
+        tabQLDC.addTab("", tabNguoi);
 
         btn_add1.setText("Thêm");
 
@@ -194,7 +200,7 @@ public class Home extends javax.swing.JFrame implements Screen{
                 .addContainerGap())
         );
 
-        tabQLDC.addTab("Quản lý hộ gia đình", tabHoGiaDinh);
+        tabQLDC.addTab("", tabHoGiaDinh);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -229,6 +235,11 @@ public class Home extends javax.swing.JFrame implements Screen{
     private void tabQLDCStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabQLDCStateChanged
         tblHoGiaDinh.setModel(hoGiaDinhDAO.getResults());
     }//GEN-LAST:event_tabQLDCStateChanged
+
+    private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
+        getInstance().Destroy();
+        AddPerson.getInstance().Render();
+    }//GEN-LAST:event_btn_addActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

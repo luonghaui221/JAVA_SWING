@@ -29,7 +29,10 @@ public class NguoiDAO extends AbstractDAO<Nguoi> implements INguoiDAO {
 
     @Override
     public Nguoi addNguoi(Nguoi nguoi) {
-        int result = insert("insert into Nguoi values ()");
+        int result = insert("insert into Nguoi values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                nguoi.getId(),nguoi.getHo(),nguoi.getTen(),nguoi.getNgaySinh(),nguoi.getNoiCuTru(),
+                nguoi.getNoiSinh(),nguoi.isGioiTinh(),nguoi.getDanToc(),nguoi.getTonGiao(),nguoi.getMqhChuHo(),
+                nguoi.getNgheNghiep(),nguoi.getSoDT(),nguoi.isTinhTrangHonNhan(),nguoi.getIdHoGiaDinh());
         return result == 0 ? null : nguoi;
     }
 
