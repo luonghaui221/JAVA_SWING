@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import model.TableNguoi;
 
 public class AbstractDAO<T> implements GenericDAO<T>{
     private void setParams(PreparedStatement statement,Object... parameters) throws SQLException{
@@ -127,6 +128,32 @@ public class AbstractDAO<T> implements GenericDAO<T>{
                 if(statement != null) statement.close();
             }catch (SQLException e){
                 System.out.println(e);
+            }
+        }
+    }
+
+    @Override
+    public <T> List<T> getResults(String sql,ObjectMapper<T> objMapper, Object... parameters) {
+        List<T> result = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        try{
+            conn = ConnectionUtils.getConnection();
+            statement = conn.prepareStatement(sql);
+            setParams(statement,parameters);
+            rs = statement.executeQuery();
+            result.add(objMapper.map(rs));
+            return result;
+        }catch (SQLException e){
+            return null;
+        }finally {
+            try {
+                if(conn != null) conn.close();
+                if(statement != null) statement.close();
+                if(rs != null) rs.close();
+            }catch (SQLException e){
+                return null;
             }
         }
     }

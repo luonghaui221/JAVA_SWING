@@ -4,6 +4,7 @@ import model.HoGiaDinh;
 import model.Nguoi;
 
 import java.util.List;
+import model.TableHoGiaDinh;
 
 public interface IHoGiaDinhDAO extends GenericDAO<HoGiaDinh>{
     List<HoGiaDinh> getAllHoGiaDinh();
@@ -11,4 +12,5 @@ public interface IHoGiaDinhDAO extends GenericDAO<HoGiaDinh>{
     HoGiaDinh addHoGiaDinh(Nguoi nguoi);
     HoGiaDinh updateHoGiaDinh(Nguoi nguoi);
     void deleteHoGiaDinh(String id);
+    TableHoGiaDinh getResults();
 }

@@ -4,6 +4,15 @@
  */
 package controller;
 
+import DAO.IHoGiaDinhDAO;
+import DAO.INguoiDAO;
+import DAO.implement.HoGiaDinhDAO;
+import DAO.implement.NguoiDAO;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.TableNguoi;
+
 /**
  *
  * @author luong
@@ -11,11 +20,14 @@ package controller;
 public class Home extends javax.swing.JFrame implements Screen{
 
     private static Home instance;
-
+    private INguoiDAO nguoiDAO;
+    private IHoGiaDinhDAO hoGiaDinhDAO;
     /**
      * Creates new form Home
      */
     private Home() {
+        nguoiDAO = new NguoiDAO();
+        hoGiaDinhDAO = new HoGiaDinhDAO();
         initComponents();
     }
     public static Home getInstance(){
@@ -24,6 +36,16 @@ public class Home extends javax.swing.JFrame implements Screen{
         }
         return instance;
     }
+    @Override
+    public void Render() {
+        getInstance().setVisible(true);
+    }
+
+    @Override
+    public void Destroy() {
+        getInstance().setVisible(false);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,77 +56,197 @@ public class Home extends javax.swing.JFrame implements Screen{
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        tabQLDC = new javax.swing.JTabbedPane();
+        tabNguoi = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblNguoi = new javax.swing.JTable();
+        btn_add = new javax.swing.JButton();
+        btn_edit = new javax.swing.JButton();
+        btn_delete = new javax.swing.JButton();
+        btn_exit = new javax.swing.JButton();
+        tabHoGiaDinh = new javax.swing.JPanel();
+        btn_add1 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblHoGiaDinh = new javax.swing.JTable();
+        btn_edit1 = new javax.swing.JButton();
+        btn_delete1 = new javax.swing.JButton();
+        btn_exit1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("jLabel1");
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel1.setText("QUẢN LÝ DÂN CƯ");
+
+        tabQLDC.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabQLDCStateChanged(evt);
+            }
+        });
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        tblNguoi.setModel(nguoiDAO.getResults());
+        tblNguoi.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tblNguoi.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblNguoi.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblNguoi.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                tblNguoiComponentShown(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblNguoi);
+
+        btn_add.setText("Thêm");
+
+        btn_edit.setText("Sửa");
+
+        btn_delete.setText("Xóa");
+
+        btn_exit.setText("Thoát");
+
+        javax.swing.GroupLayout tabNguoiLayout = new javax.swing.GroupLayout(tabNguoi);
+        tabNguoi.setLayout(tabNguoiLayout);
+        tabNguoiLayout.setHorizontalGroup(
+            tabNguoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabNguoiLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabNguoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabNguoiLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btn_add, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(btn_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(btn_exit, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 716, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        tabNguoiLayout.setVerticalGroup(
+            tabNguoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabNguoiLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabNguoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_edit, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+                    .addComponent(btn_delete, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+                    .addComponent(btn_add, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+                    .addComponent(btn_exit, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        tabQLDC.addTab("Quản lý thông tin cá nhân", tabNguoi);
+
+        btn_add1.setText("Thêm");
+
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        tblHoGiaDinh.setModel(nguoiDAO.getResults());
+        tblHoGiaDinh.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tblHoGiaDinh.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblHoGiaDinh.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                tblHoGiaDinhComponentShown(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblHoGiaDinh);
+
+        btn_edit1.setText("Sửa");
+
+        btn_delete1.setText("Xóa");
+
+        btn_exit1.setText("Thoát");
+
+        javax.swing.GroupLayout tabHoGiaDinhLayout = new javax.swing.GroupLayout(tabHoGiaDinh);
+        tabHoGiaDinh.setLayout(tabHoGiaDinhLayout);
+        tabHoGiaDinhLayout.setHorizontalGroup(
+            tabHoGiaDinhLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabHoGiaDinhLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabHoGiaDinhLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabHoGiaDinhLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btn_add1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(btn_edit1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(btn_delete1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(btn_exit1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 716, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        tabHoGiaDinhLayout.setVerticalGroup(
+            tabHoGiaDinhLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHoGiaDinhLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabHoGiaDinhLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_edit1, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+                    .addComponent(btn_delete1, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+                    .addComponent(btn_add1, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+                    .addComponent(btn_exit1, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        tabQLDC.addTab("Quản lý hộ gia đình", tabHoGiaDinh);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(153, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(182, 182, 182))
+            .addComponent(tabQLDC)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(204, 204, 204)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(121, 121, 121)
+                .addGap(10, 10, 10)
                 .addComponent(jLabel1)
-                .addContainerGap(163, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tabQLDC))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void tblNguoiComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tblNguoiComponentShown
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblNguoiComponentShown
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Home().setVisible(true);
-            }
-        });
-    }
+    private void tblHoGiaDinhComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tblHoGiaDinhComponentShown
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblHoGiaDinhComponentShown
+
+    private void tabQLDCStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabQLDCStateChanged
+        tblHoGiaDinh.setModel(hoGiaDinhDAO.getResults());
+    }//GEN-LAST:event_tabQLDCStateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_add;
+    private javax.swing.JButton btn_add1;
+    private javax.swing.JButton btn_delete;
+    private javax.swing.JButton btn_delete1;
+    private javax.swing.JButton btn_edit;
+    private javax.swing.JButton btn_edit1;
+    private javax.swing.JButton btn_exit;
+    private javax.swing.JButton btn_exit1;
     private javax.swing.JLabel jLabel1;
-
-    @Override
-    public void Render() {
-        getInstance().setVisible(true);
-    }
-
-    @Override
-    public void Destroy() {
-        getInstance().setVisible(false);
-    }
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPanel tabHoGiaDinh;
+    private javax.swing.JPanel tabNguoi;
+    private javax.swing.JTabbedPane tabQLDC;
+    private javax.swing.JTable tblHoGiaDinh;
+    private javax.swing.JTable tblNguoi;
     // End of variables declaration//GEN-END:variables
 }

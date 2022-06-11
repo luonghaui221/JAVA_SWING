@@ -2,27 +2,28 @@ package DAO.implement;
 
 import DAO.AbstractDAO;
 import DAO.INguoiDAO;
+import java.sql.ResultSet;
 import model.Nguoi;
 import utils.NguoiMapper;
 import utils.ObjectMapper;
 
 import java.util.List;
+import model.TableNguoi;
+import utils.TableNguoiMapper;
 
 
 public class NguoiDAO extends AbstractDAO<Nguoi> implements INguoiDAO {
-    private ObjectMapper mapper;
     public NguoiDAO() {
-        mapper = new NguoiMapper();
     }
 
     @Override
     public List<Nguoi> getAllNguoi() {
-        return select("select * from Nguoi",mapper);
+        return select("select * from Nguoi",new NguoiMapper());
     }
 
     @Override
     public Nguoi getNguoi(String id) {
-        List<Nguoi> result = select("select * from Nguoi",mapper);
+        List<Nguoi> result = select("select * from Nguoi",new NguoiMapper());
         return result.size() > 0? (Nguoi) result.get(0) : null;
     }
 
@@ -47,5 +48,15 @@ public class NguoiDAO extends AbstractDAO<Nguoi> implements INguoiDAO {
     @Override
     public void deleteNguoi(String id) {
         delete("delete Nguoi where id = ?",id);
+    }
+
+    @Override
+    public TableNguoi getResults() {
+        try{
+            List<TableNguoi> list = getResults("select * from Nguoi",new TableNguoiMapper());
+            return list.isEmpty() ? null : list.get(0);
+        }catch(Exception e){
+            return null;
+        }
     }
 }
