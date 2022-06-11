@@ -6,7 +6,6 @@ import model.Nguoi;
 import utils.NguoiMapper;
 import utils.ObjectMapper;
 
-import java.util.LinkedList;
 import java.util.List;
 
 
@@ -23,7 +22,7 @@ public class NguoiDAO extends AbstractDAO<Nguoi> implements INguoiDAO {
 
     @Override
     public Nguoi getNguoi(String id) {
-        List result = select("select * from Nguoi",mapper);
+        List<Nguoi> result = select("select * from Nguoi",mapper);
         return result.size() > 0? (Nguoi) result.get(0) : null;
     }
 
@@ -39,11 +38,14 @@ public class NguoiDAO extends AbstractDAO<Nguoi> implements INguoiDAO {
         sql.append("noiCuTru = ?, noiSinh = ?, gioiTinh = ?, danToc = ?, tonGiao = ?, ");
         sql.append("mqhChuHo = ?, ngheNghiep = ?, soDT = ?, trangThaiHonNhan = ?, id_HoGiaDinh = ? ");
         sql.append("where id = ?");
-        return null;
+        int result = update(sql.toString(),nguoi.getHo(),nguoi.getTen(),nguoi.getNgaySinh(),nguoi.getNoiCuTru(),
+                nguoi.getNoiSinh(),nguoi.isGioiTinh(),nguoi.getDanToc(),nguoi.getTonGiao(),nguoi.getMqhChuHo(),
+                nguoi.getNgheNghiep(),nguoi.getSoDT(),nguoi.isTinhTrangHonNhan(),nguoi.getIdHoGiaDinh());
+        return result == 0 ? null : nguoi;
     }
 
     @Override
     public void deleteNguoi(String id) {
-
+        delete("delete Nguoi where id = ?",id);
     }
 }
