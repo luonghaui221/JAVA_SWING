@@ -15,7 +15,7 @@ import java.util.List;
 public class AbstractDAO<T> implements GenericDAO<T>{
     private void setParams(PreparedStatement statement,Object... parameters) throws SQLException{
         if(parameters.length > 0){
-            int index = 0;
+            int index = 1;
             for(Object o : parameters){
                 if(o instanceof String){
                     statement.setString(index,(String) o); index++;
