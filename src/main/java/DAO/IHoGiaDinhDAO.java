@@ -9,8 +9,8 @@ import model.TableHoGiaDinh;
 public interface IHoGiaDinhDAO extends GenericDAO<HoGiaDinh>{
     List<HoGiaDinh> getAllHoGiaDinh();
     HoGiaDinh getHoGiaDinh(String id);
-    HoGiaDinh addHoGiaDinh(Nguoi nguoi);
-    HoGiaDinh updateHoGiaDinh(Nguoi nguoi);
+    HoGiaDinh addHoGiaDinh(HoGiaDinh hoGiaDinh);
+    HoGiaDinh updateHoGiaDinh(HoGiaDinh hoGiaDinh);
     void deleteHoGiaDinh(String id);
     TableHoGiaDinh getResults();
 }
